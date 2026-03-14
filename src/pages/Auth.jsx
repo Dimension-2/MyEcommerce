@@ -52,7 +52,7 @@ export default function Auth() {
 
         try {
             const endpoint = type === 'signup' ? '/api/users/signup' : '/api/users/login';
-            const res = await axios.post(`http://localhost:5000${endpoint}`, formData);
+            const res = await axios.post(`https://industrial-backend.vercel.app${endpoint}`, formData);
             
             triggerSystemLoad("AUTHORIZING ACCESS", () => {
                 localStorage.setItem('user', JSON.stringify(res.data));
@@ -67,7 +67,7 @@ export default function Auth() {
     const handleGoogleSuccess = async (credentialResponse) => {
         try {
             const decoded = jwtDecode(credentialResponse.credential);
-            const res = await axios.post(`http://localhost:5000/api/users/google-login`, {
+            const res = await axios.post(`https://industrial-backend.vercel.app/api/users/google-login`, {
                 name: decoded.name,
                 email: decoded.email,
                 image: decoded.picture
