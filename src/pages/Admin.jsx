@@ -5,8 +5,8 @@ import { jwtDecode } from "jwt-decode";
 import './Admin.css';
 
 export default function Admin() {
-    // UPDATED URL VARIABLE
-    const backendUrl = "https://my-ecommerce-backend-v2.vercel.app"; 
+    // UPDATED URL VARIABLE TO MATCH YOUR ACTUAL BACKEND
+    const backendUrl = "https://industrial-backend.vercel.app"; 
     
     const [user, setUser] = useState(null);
     const [activeTab, setActiveTab] = useState('orders');
@@ -71,7 +71,7 @@ export default function Admin() {
 
     useEffect(() => { if (user) fetchData(); }, [user]);
 
-    // SUBMISSION HANDLERS
+    // SUBMISSION HANDLERS WITH MULTIPART HEADERS
     const handleProductSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
@@ -79,7 +79,9 @@ export default function Admin() {
         formData.append('price', price);
         formData.append('image', image);
         try {
-            await axios.post(`${backendUrl}/api/products`, formData);
+            await axios.post(`${backendUrl}/api/products`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
             showSuccess("Product Added!");
             setTitle(''); setPrice(''); setImage(null);
             fetchData();
@@ -93,7 +95,9 @@ export default function Admin() {
         formData.append('subtitle', bSubtitle);
         formData.append('image', bImage);
         try {
-            await axios.post(`${backendUrl}/api/banners`, formData);
+            await axios.post(`${backendUrl}/api/banners`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
             showSuccess("Banner Added!");
             setBTitle(''); setBSubtitle(''); setBImage(null);
             fetchData();
@@ -107,7 +111,9 @@ export default function Admin() {
         formData.append('linkText', cLink);
         formData.append('image', cImage);
         try {
-            await axios.post(`${backendUrl}/api/categories`, formData);
+            await axios.post(`${backendUrl}/api/categories`, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
             showSuccess("Category Created!");
             setCTitle(''); setCLink(''); setCImage(null);
             fetchData();
@@ -329,7 +335,7 @@ export default function Admin() {
                                     <div key={b._id} style={{...cardStyle, padding: '15px'}}>
                                         <img src={b.imageURL} alt="" style={{width:'100%', height:'120px', objectFit:'cover', marginBottom: '15px'}} />
                                         <span style={{fontWeight:900, fontSize:'0.7rem', display:'block'}}>{b.title.toUpperCase()}</span>
-                                        <span style={{fontSize:'0.6rem', color:'#888'}}>{b.subtitle}</span>
+                                        <span style={{fontSize:'0.65rem', color:'#888'}}>{b.subtitle}</span>
                                         <div style={{marginTop: '15px'}}>
                                             <button onClick={() => deleteItem('banners', b._id)} style={deleteBtnStyle}>REMOVE BANNER</button>
                                         </div>
@@ -378,7 +384,7 @@ export default function Admin() {
     );
 }
 
-// --- STYLING CONSTANTS ---
+// --- STYLING CONSTANTS (No changes here) ---
 const pageTitleStyle = { fontSize: '1.6rem', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '6px', margin: 0, color: '#111' };
 const sectionLabel = { fontSize: '0.65rem', letterSpacing: '3px', color: '#111', marginBottom: '25px', fontWeight: '900' };
 const cardStyle = { background:'white', padding:'30px', marginBottom:'20px', border: '1px solid #eee', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' };
