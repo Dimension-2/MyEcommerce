@@ -5,6 +5,9 @@ import { jwtDecode } from "jwt-decode";
 import './Admin.css';
 
 export default function Admin() {
+    // UPDATED URL VARIABLE
+    const backendUrl = "https://my-ecommerce-backend-v2.vercel.app"; 
+    
     const [user, setUser] = useState(null);
     const [activeTab, setActiveTab] = useState('orders');
     const [isSidebarOpen, setIsSidebarOpen] = useState(true); 
@@ -54,10 +57,10 @@ export default function Admin() {
     const fetchData = async () => {
         try {
             const [pRes, bRes, cRes, oRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/products'),
-                axios.get('http://localhost:5000/api/banners'),
-                axios.get('http://localhost:5000/api/categories'),
-                axios.get('http://localhost:5000/api/orders')
+                axios.get(`${backendUrl}/api/products`),
+                axios.get(`${backendUrl}/api/banners`),
+                axios.get(`${backendUrl}/api/categories`),
+                axios.get(`${backendUrl}/api/orders`)
             ]);
             setProducts(pRes.data);
             setBanners(bRes.data);
@@ -76,7 +79,7 @@ export default function Admin() {
         formData.append('price', price);
         formData.append('image', image);
         try {
-            await axios.post('http://localhost:5000/api/products', formData);
+            await axios.post(`${backendUrl}/api/products`, formData);
             showSuccess("Product Added!");
             setTitle(''); setPrice(''); setImage(null);
             fetchData();
@@ -90,7 +93,7 @@ export default function Admin() {
         formData.append('subtitle', bSubtitle);
         formData.append('image', bImage);
         try {
-            await axios.post('http://localhost:5000/api/banners', formData);
+            await axios.post(`${backendUrl}/api/banners`, formData);
             showSuccess("Banner Added!");
             setBTitle(''); setBSubtitle(''); setBImage(null);
             fetchData();
@@ -104,7 +107,7 @@ export default function Admin() {
         formData.append('linkText', cLink);
         formData.append('image', cImage);
         try {
-            await axios.post('http://localhost:5000/api/categories', formData);
+            await axios.post(`${backendUrl}/api/categories`, formData);
             showSuccess("Category Created!");
             setCTitle(''); setCLink(''); setCImage(null);
             fetchData();
@@ -114,7 +117,7 @@ export default function Admin() {
     const deleteItem = (type, id) => {
         triggerConfirm("Confirm Deletion", "This item will be permanently removed.", async () => {
             try {
-                await axios.delete(`http://localhost:5000/api/${type}/${id}`);
+                await axios.delete(`${backendUrl}/api/${type}/${id}`);
                 showSuccess("Deleted Successfully");
                 fetchData();
             } catch (err) { showSuccess("Delete Failed"); }
@@ -122,9 +125,11 @@ export default function Admin() {
     };
 
     const updateOrderStatus = async (id, status) => {
-        await axios.put(`http://localhost:5000/api/orders/${id}`, { status });
-        showSuccess(`Marked as ${status}`);
-        fetchData();
+        try {
+            await axios.put(`${backendUrl}/api/orders/${id}`, { status });
+            showSuccess(`Marked as ${status}`);
+            fetchData();
+        } catch (err) { showSuccess("Status Update Failed"); }
     };
 
     const getStatusStyle = (s) => {
@@ -307,7 +312,7 @@ export default function Admin() {
                         </div>
                     )}
 
-                    {/* BANNERS TAB - ADDED DISPLAY LIST */}
+                    {/* BANNERS TAB */}
                     {activeTab === 'banners' && (
                         <div>
                             <h1 style={pageTitleStyle}>Marketing</h1>
@@ -334,7 +339,7 @@ export default function Admin() {
                         </div>
                     )}
 
-                    {/* CATEGORIES TAB - ADDED DISPLAY LIST */}
+                    {/* CATEGORIES TAB */}
                     {activeTab === 'categories' && (
                         <div>
                             <h1 style={pageTitleStyle}>Categories</h1>

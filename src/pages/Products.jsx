@@ -26,7 +26,8 @@ export default function Products({ addToCart }) {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const res = await axios.get('http://localhost:5000/api/products');
+                // FIXED: Updated the localhost link to your live Vercel link
+                const res = await axios.get('https://my-ecommerce-backend-v2.vercel.app/api/products');
                 setProducts(res.data);
                 setLoading(false);
             } catch (err) {
