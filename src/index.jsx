@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './index.css'; // Assuming you have a CSS file
 import App from './App';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+// This ID now matches your Google Cloud Screenshot (image_418557.png)
+const GOOGLE_CLIENT_ID = "251511926848-3sg3odo8s55iba20ctkir00fsot91i2m.apps.googleusercontent.com";
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <GoogleOAuthProvider clientId="251511926848-2017a4e44rkrsc798lvl3vhb1hguv2sp.apps.googleusercontent.com">
-    <React.StrictMode>
+  <React.StrictMode>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <App />
-    </React.StrictMode>
-  </GoogleOAuthProvider>
+    </GoogleOAuthProvider>
+  </React.StrictMode>
 );
