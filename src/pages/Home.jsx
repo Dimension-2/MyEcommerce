@@ -12,8 +12,9 @@ export default function Home() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const bRes = await axios.get('http://localhost:5000/api/banners');
-                const cRes = await axios.get('http://localhost:5000/api/categories');
+                // FIXED: Changed localhost to your live Vercel URL
+                const bRes = await axios.get('https://industrial-backend.vercel.app/api/banners');
+                const cRes = await axios.get('https://industrial-backend.vercel.app/api/categories');
                 setBanners(bRes.data);
                 setCategories(cRes.data);
             } catch (err) {
@@ -107,7 +108,7 @@ export default function Home() {
                             <div className="banner-dimmer" style={bannerOverlay}>
                                 <div className="banner-content" style={textContainer}>
                                     <h1 style={heroTitle}>{banner.title.toUpperCase()}</h1>
-                                    <p style={heroSub}>{banner.subtitle.toUpperCase()}</p>
+                                    <h2 style={heroSub}>{banner.subtitle.toUpperCase()}</h2>
                                     <button onClick={() => navigate('/products')} className="main-btn-hover">
                                         VIEW COLLECTION
                                     </button>
@@ -175,7 +176,7 @@ const slideStyle = { minWidth: '100%', height: '100%', backgroundSize: 'cover', 
 
 const bannerOverlay = { 
     height: '100%', width: '100%', 
-    background: 'rgba(0,0,0,0)', // Invisible until hover
+    background: 'rgba(0,0,0,0)', 
     display: 'flex', alignItems: 'center', padding: '0 10%',
     transition: '0.5s ease'
 };
@@ -194,7 +195,6 @@ const vLine = { width: '1px', height: '20px', background: '#eee' };
 
 const accentLine = { width: '50px', height: '5px', background: '#FFD700', margin: '20px auto' };
 
-// GRID FIX: Changed to 280px min for better alignment
 const cardGrid = { 
     display: 'grid', 
     gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
