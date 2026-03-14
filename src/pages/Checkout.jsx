@@ -13,6 +13,7 @@ export default function Checkout({ cart, setCart }) {
         address: ''
     });
 
+    // Calculate total price accurately
     const subtotal = cart.reduce((acc, item) => acc + Number(item.price), 0);
 
     const handleChange = (e) => {
@@ -32,11 +33,14 @@ export default function Checkout({ cart, setCart }) {
         };
 
         try {
-            await axios.post('http://localhost:5000/api/orders', orderData);
+            // FIXED: Pointing to your live Vercel backend instead of localhost
+            await axios.post('https://industrial-backend.vercel.app/api/orders', orderData);
+            
             setIsSuccess(true); 
-            setCart([]); 
+            setCart([]); // Clear cart on success
         } catch (err) {
-            alert("TERMINAL ERROR: FAILED TO PROCESS ORDER");
+            console.error("Order Submission Error:", err);
+            alert("TERMINAL ERROR: FAILED TO PROCESS ORDER. Check your connection.");
         }
     };
 
@@ -101,7 +105,7 @@ export default function Checkout({ cart, setCart }) {
                             <div key={i} style={miniItem}>
                                 <img src={item.imageURL} alt="" style={miniImg} />
                                 <div style={{flex: 1}}>
-                                    <p style={{margin: 0, fontWeight: '900', fontSize: '0.75rem', letterSpacing: '1px'}}>{item.title.toUpperCase()}</p>
+                                    <p style={{margin: 0, fontWeight: '900', fontSize: '0.75rem', letterSpacing: '1px'}}>{item.title ? item.title.toUpperCase() : "PRODUCT"}</p>
                                     <p style={{margin: '2px 0 0 0', color: '#111', fontWeight: '900', fontSize: '0.85rem'}}>${item.price}</p>
                                 </div>
                             </div>
@@ -140,28 +144,21 @@ export default function Checkout({ cart, setCart }) {
 }
 
 // THEMED STYLES
-const containerStyle = { padding: '80px 5%', backgroundColor: '#f4f4f4', minHeight: '100vh', display: 'flex', justifyContent: 'center', fontFamily: 'inherit' };
+const containerStyle = { padding: '80px 5%', backgroundColor: '#f4f4f4', minHeight: '100vh', display: 'flex', justifyContent: 'center' };
 const mainContent = { display: 'grid', gridTemplateColumns: '1fr 400px', gap: '30px', width: '100%', maxWidth: '1200px' };
-
 const formWrapper = { background: 'white', padding: '40px', borderRadius: '0px', border: '1px solid #ddd', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', animation: 'slideIn 0.5s ease-out' };
 const headerStyle = { borderBottom: '5px solid #111', paddingBottom: '10px', marginBottom: '30px', fontSize: '1rem', fontWeight: '900', letterSpacing: '4px' };
-
 const inputGroup = { marginBottom: '25px' };
 const labelStyle = { display: 'block', marginBottom: '10px', fontWeight: '900', fontSize: '0.65rem', color: '#888', letterSpacing: '2px' };
 const inputStyle = { width: '100%', padding: '15px', borderRadius: '0px', border: 'none', background: '#f9f9f9', borderBottom: '2px solid #eee', boxSizing: 'border-box', transition: '0.3s', outline: 'none', fontSize: '0.8rem', fontWeight: 'bold' };
-
 const summarySide = { background: 'white', padding: '30px', borderRadius: '0px', borderTop: '10px solid #FFD700', boxShadow: '0 20px 40px rgba(0,0,0,0.05)', height: 'fit-content', position: 'sticky', top: '100px' };
 const scrollBox = { maxHeight: '300px', overflowY: 'auto', marginBottom: '20px', paddingRight: '10px' };
 const miniItem = { display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '15px', paddingBottom: '15px', borderBottom: '1px solid #f2f2f2' };
 const miniImg = { width: '50px', height: '50px', borderRadius: '0px', objectFit: 'cover', border: '1px solid #eee' };
-
 const billBox = { background: '#f9f9f9', padding: '25px', borderRadius: '0px', border: '1px solid #eee' };
 const billRow = { display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontWeight: '900', fontSize: '0.7rem', letterSpacing: '1px' };
 const codBadge = { marginTop: '20px', textAlign: 'center', border: '1px dashed #111', color: '#111', padding: '12px', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '2px' };
-
 const orderBtn = { width: '100%', padding: '20px', background: '#111', color: '#FFD700', border: 'none', borderRadius: '0px', fontWeight: '900', fontSize: '0.8rem', cursor: 'pointer', transition: '0.4s', marginTop: '10px', letterSpacing: '3px' };
-
-// MODAL STYLES
 const modalOverlay = { position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', background: 'rgba(0,0,0,0.95)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, backdropFilter: 'blur(5px)' };
 const modalContent = { background: 'white', padding: '60px', borderRadius: '0px', textAlign: 'center', maxWidth: '500px', width: '90%', animation: 'slideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1)', borderTop: '10px solid #FFD700' };
 const tickCircle = { width: '80px', height: '80px', background: '#111', borderRadius: '0px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFD700', fontSize: '2.5rem', margin: '0 auto 20px', position: 'relative', overflow: 'hidden' };
